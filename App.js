@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Dimensions,
   Pressable,
@@ -144,8 +144,43 @@ const Task = ({ task }) => {
   );
 };
 
+const WEEK_DAYS = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
+
 export default function App() {
   const [taskList, setTaskList] = useState(TASK_LIST);
+  const [completedCount, setCompletedCount] = useState(0);
+
+  const currentDate = new Date();
+  const dayOfWeek = currentDate.getDay();
+
+  useEffect(() => {
+    const filteredTasks = TASK_LIST.filter((task) => {
+      return task.id !== 3 || dayOfWeek === 5;
+    });
+
+    if (dayOfWeek !== 5) {
+      filteredTasks[2].title = 'Pray Juhur Prayer';
+    }
+    setTaskList(filteredTasks);
+  }, [dayOfWeek]);
+
+  const countCompletedTasks = (newTaskList) => {
+    let count = 0;
+    newTaskList.forEach((task) => {
+      if (task.completed) {
+        count++;
+      }
+    });
+    setCompletedCount(count);
+  };
 
   const toggleTask = (id) => {
     const newTaskList = taskList.map((task) => {
@@ -158,6 +193,11 @@ export default function App() {
       return task;
     });
     setTaskList(newTaskList);
+    countCompletedTasks(newTaskList);
+  };
+
+  const getCompletePercentage = (completedCount) => {
+    return (completedCount / taskList.length) * 100;
   };
 
   return (
@@ -193,7 +233,17 @@ export default function App() {
               textAlign: 'center',
             }}
           >
-            Friday Obligation
+            {WEEK_DAYS[dayOfWeek]} Obligation
+          </Text>
+          <Text
+            style={{
+              color: '#FFFFFF',
+              marginVertical: 10,
+              textAlign: 'center',
+            }}
+          >
+            Today you have completed:{' '}
+            {getCompletePercentage(completedCount)?.toFixed(0)}%
           </Text>
         </View>
         <View
@@ -202,11 +252,18 @@ export default function App() {
             width: Dimensions.get('window').width,
           }}
         >
-          {taskList.map((task) => (
-            <Pressable onPress={() => toggleTask(task.id)} key={task.id}>
-              <Task task={task} toggleTask={toggleTask} />
-            </Pressable>
-          ))}
+          {taskList
+            .filter((item) => {
+              if (item.id === 3 && new Date().getDay() === 5) {
+                return item;
+              }
+              return item;
+            })
+            .map((task) => (
+              <Pressable onPress={() => toggleTask(task.id)} key={task.id}>
+                <Task task={task} toggleTask={toggleTask} />
+              </Pressable>
+            ))}
         </View>
       </ScrollView>
       <StatusBar style="auto" />
