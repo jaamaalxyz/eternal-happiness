@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { TASK_LIST } from '../model';
+import { TASK_LIST } from '../models';
 import { getDayOfWeek } from '../utils';
 
 export const useTask = () => {

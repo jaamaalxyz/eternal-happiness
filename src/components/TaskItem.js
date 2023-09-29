@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-const Task = ({ task }) => {
+const TaskItem = ({ task }) => {
   return (
     <View style={styles.wrapper}>
       <View style={styles.slWrapper}>
@@ -17,7 +17,7 @@ const Task = ({ task }) => {
   );
 };
 
-export default Task;
+export default TaskItem;
 
 const styles = StyleSheet.create({
   wrapper: {

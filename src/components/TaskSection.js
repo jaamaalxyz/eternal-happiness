@@ -1,9 +1,9 @@
 import React from 'react';
 import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
 import { getDayOfWeek } from '../utils';
-import Task from './Task';
+import TaskItem from './TaskItem';
 
-const TaskList = ({ taskList, toggleTask }) => {
+const TaskSection = ({ taskList, toggleTask }) => {
   const dayOfWeek = getDayOfWeek();
 
   return (
@@ -17,14 +17,14 @@ const TaskList = ({ taskList, toggleTask }) => {
         })
         .map((task) => (
           <Pressable onPress={() => toggleTask(task.id)} key={task.id}>
-            <Task task={task} toggleTask={toggleTask} />
+            <TaskItem task={task} toggleTask={toggleTask} />
           </Pressable>
         ))}
     </View>
   );
 };
 
-export default TaskList;
+export default TaskSection;
 
 const styles = StyleSheet.create({
   taskList: {
